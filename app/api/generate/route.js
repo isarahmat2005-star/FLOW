@@ -7,10 +7,14 @@ export async function POST(req) {
 
     const payload = {
       clientContext: { tool: "BACKBONE" },
-      imageModelSettings: { imageModel: model, aspectRatio: aspectRatio },
+      imageModelSettings: { 
+        imageModel: "IMAGEN_3_5", // Kita paksa pakai nama sandi yang terbukti ada
+        aspectRatio: aspectRatio 
+      },
       mediaCategory: "MEDIA_CATEGORY_BOARD",
       prompt: prompt,
-      sampleCount: sampleCount
+      sampleCount: sampleCount,
+      seed: Math.floor(Math.random() * 9999999) + 1 // Kita tambahkan seed acak
     };
 
     const response = await fetch('https://aisandbox-pa.googleapis.com/v1/whisk:generateImage', {
