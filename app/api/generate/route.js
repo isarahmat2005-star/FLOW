@@ -13,7 +13,7 @@ export async function POST(req) {
       },
       imageModelSettings: { 
         // KITA PAKSA PAKAI INI DULU AGAR TEMBUS
-        imageModel: "NANO_BANANA", 
+        imageModel: "NANO_BANANA_2", 
         aspectRatio: aspectRatio 
       },
       mediaCategory: "MEDIA_CATEGORY_BOARD",
