@@ -4,47 +4,22 @@ export async function POST(req) {
   try {
     const { token, prompt, model, aspectRatio } = await req.json();
 
-    const projectId = "cd7643fb-9500-4973-a185-0350a90ad361"; 
-
-    // PASTE TOKEN RECAPTCHA FRESH DARI INSPECT ELEMENT KE SINI
-    // (Ingat, ini cepat basi, ambil yang paling baru sebelum save!)
-    const recaptchaToken = "PASTE_TOKEN_RECAPTCHA_YANG_PANJANG_BANGET_DISINI";
-
+    // FORMAT PAYLOAD LAMA (WHISK) YANG TIDAK BUTUH RECAPTCHA!
     const payload = {
       clientContext: { 
-        projectId: projectId,
-        tool: "PINHOLE",
-        recaptchaContext: {
-          applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
-          token: recaptchaToken
-          // KITA HAPUS sessionId KARENA DITOLAK SERVER
-        }
+        workflowId: "test_" + Math.random().toString(36).substring(7),
+        tool: "BACKBONE" 
       },
-      mediaGenerationContext: {
-        batchId: "batch_" + Math.random().toString(36).substring(2, 15)
+      imageModelSettings: { 
+        imageModel: model, // Di sini kita selipkan GEM_PIX_2
+        aspectRatio: aspectRatio || "IMAGE_ASPECT_RATIO_SQUARE" 
       },
-      requests: [
-        {
-          clientContext: {
-            projectId: projectId,
-            tool: "PINHOLE",
-            recaptchaContext: {
-              applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
-              token: recaptchaToken
-              // KITA HAPUS sessionId KARENA DITOLAK SERVER
-            }
-          },
-          imageAspectRatio: aspectRatio || "IMAGE_ASPECT_RATIO_SQUARE",
-          imageModelName: model,
-          seed: Math.floor(Math.random() * 9999999) + 1,
-          structuredPrompt: {
-            parts: [{ text: prompt }]
-          }
-        }
-      ],
-      useNewMedia: true 
+      mediaCategory: "MEDIA_CATEGORY_BOARD",
+      prompt: prompt,
+      seed: Math.floor(Math.random() * 9999999) + 1
     };
 
+    // TEMBAK KE URL PINTU BELAKANG LAMA
     const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/whisk:generateImage`;
 
     const response = await fetch(endpointUrl, {
