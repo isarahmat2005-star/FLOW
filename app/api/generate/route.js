@@ -34,8 +34,8 @@ export async function POST(req) {
       ]
     };
 
-    // PERBAIKAN URL ENDPOINT SESUAI INSPECT ELEMENT TERBARU
-    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/flowWorkflows/flowMediaBatchGenerateImages`;
+    // PERBAIKAN FATAL: Menggunakan Titik Dua (:) sebelum flowMediaBatchGenerateImages
+    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}:flowMediaBatchGenerateImages`;
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
@@ -48,6 +48,7 @@ export async function POST(req) {
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error("Ditolak Google:", errorText);
       return NextResponse.json({ error: "Ditolak Google", details: errorText, model: model }, { status: response.status });
     }
 
@@ -55,6 +56,7 @@ export async function POST(req) {
     return NextResponse.json({ success: true, data: data, model: model });
 
   } catch (error) {
+    console.error("Server Vercel Error:", error);
     return NextResponse.json({ error: "Gagal server", model: model }, { status: 500 });
   }
 }
