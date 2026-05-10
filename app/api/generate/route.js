@@ -4,6 +4,8 @@ export async function POST(req) {
   try {
     const { token, prompt, model, aspectRatio } = await req.json();
 
+    // Sementara kita hardcode pakai Project ID milikmu agar bisa tembus.
+    // Nanti bisa kita buat dinamis dari Frontend jika diperlukan.
     const projectId = "cd7643fb-9500-4973-a185-0350a90ad361"; 
 
     const payload = {
@@ -34,8 +36,8 @@ export async function POST(req) {
       ]
     };
 
-    // PERBAIKAN URL: Kita arahkan tepat ke dalam jalur "flowWorkflows"
-    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/flowWorkflows:flowMediaBatchGenerateImages`;
+    // URL FINAL YANG BENAR BERDASARKAN HASIL INSPECT ELEMENT
+    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}/flowMedia:batchGenerateImages`;
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
