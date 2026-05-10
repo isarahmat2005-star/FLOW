@@ -6,10 +6,20 @@ export async function POST(req) {
 
     const projectId = "cd7643fb-9500-4973-a185-0350a90ad361"; 
 
+    // PASTE TOKEN RECAPTCHA FRESH DARI INSPECT ELEMENT KE SINI
+    const recaptchaToken = "PASTE_TOKEN_RECAPTCHA_YANG_PANJANG_BANGET_DISINI";
+    const sessionId = ";1778390754464"; // Sesuaikan dengan yang ada di Inspect Element
+
     const payload = {
       clientContext: { 
         projectId: projectId,
-        tool: "PINHOLE" 
+        tool: "PINHOLE",
+        // KITA SOGOK SATPAMNYA DENGAN RECAPTCHA FRESH
+        recaptchaContext: {
+          applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
+          token: recaptchaToken,
+          sessionId: sessionId
+        }
       },
       mediaGenerationContext: {
         batchId: "batch_" + Math.random().toString(36).substring(2, 15)
@@ -18,21 +28,21 @@ export async function POST(req) {
         {
           clientContext: {
             projectId: projectId,
-            tool: "PINHOLE"
+            tool: "PINHOLE",
+            recaptchaContext: {
+              applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
+              token: recaptchaToken,
+              sessionId: sessionId
+            }
           },
           imageAspectRatio: aspectRatio || "IMAGE_ASPECT_RATIO_SQUARE",
-          // Parameter imageInputs yang kosong dihapus agar lebih aman
           imageModelName: model,
           seed: Math.floor(Math.random() * 9999999) + 1,
           structuredPrompt: {
-            parts: [
-              { text: prompt }
-            ]
+            parts: [{ text: prompt }]
           }
-          // useNewMedia dihapus dari sini!
         }
       ],
-      // POSISI YANG BENAR: useNewMedia ditaruh di root level sejajar dengan requests
       useNewMedia: true 
     };
 
@@ -49,7 +59,6 @@ export async function POST(req) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Ditolak Google:", errorText);
       return NextResponse.json({ error: "Ditolak Google", details: errorText, model: model }, { status: response.status });
     }
 
@@ -57,7 +66,6 @@ export async function POST(req) {
     return NextResponse.json({ success: true, data: data, model: model });
 
   } catch (error) {
-    console.error("Server Vercel Error:", error);
     return NextResponse.json({ error: "Gagal server", model: model }, { status: 500 });
   }
 }
