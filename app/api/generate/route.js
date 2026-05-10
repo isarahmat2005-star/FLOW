@@ -45,7 +45,7 @@ export async function POST(req) {
       useNewMedia: true 
     };
 
-    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}/flowMedia:batchGenerateImages`;
+    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/whisk:generateImage`;
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
