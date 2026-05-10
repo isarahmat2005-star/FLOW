@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Sparkles, Key, Image as ImageIcon, Layers, Download, Trash2, Loader2, Target } from 'lucide-react';
+import { Sparkles, Key, Image as ImageIcon, Layers, Download, Trash2, Loader2, Target, ExternalLink } from 'lucide-react';
 
 export default function Home() {
   const [token, setToken] = useState('');
@@ -13,14 +13,8 @@ export default function Home() {
   const [status, setStatus] = useState({ msg: '', type: '' });
 
   // DAFTAR MODEL YANG AKAN DITES SECARA BERSAMAAN
-  // Kita tambahkan GEM_PIX_2 yang baru saja ditemukan dari Inspect Element!
   const modelsToTest = [
     "GEM_PIX_2", // Nama sandi asli internal Google (Wajib Tes Pertama)
-    "NANO_BANANA_PRO", 
-    "NANO_BANANA_2", 
-    "NANO_BANANA",
-    "IMAGEN_4",
-    "IMAGEN_3_5"
   ];
 
   const handleGenerate = async () => {
@@ -104,9 +98,30 @@ export default function Home() {
         </div>
 
         <div className="p-6 flex-1 flex flex-col gap-6">
+          
+          {/* KOLOM TOKEN DENGAN TOMBOL SHORTCUT */}
           <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <label className="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5"><Key size={14} /> API Token</label>
-            <input type="password" value={token} onChange={(e) => setToken(e.target.value)} placeholder="Paste token ya29..." className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-xs font-mono" />
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                <Key size={14} /> API Token
+              </label>
+              <a 
+                href="https://labs.google.com/api/auth/session" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[10px] bg-indigo-100 text-indigo-700 hover:bg-indigo-600 hover:text-white px-2 py-1 rounded font-bold transition-all flex items-center gap-1"
+                title="Buka tab baru untuk copy Bearer Token"
+              >
+                Ambil Token <ExternalLink size={10} />
+              </a>
+            </div>
+            <input 
+              type="password" 
+              value={token} 
+              onChange={(e) => setToken(e.target.value)} 
+              placeholder="Paste token di sini..." 
+              className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-xs font-mono" 
+            />
           </div>
 
           <div className="space-y-4">
@@ -166,12 +181,12 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 content-start">
               {images.map((img) => (
                 <div key={img.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative group">
-                  {/* LABEL NAMA MODEL (Lebih mencolok agar gampang dianalisis) */}
+                  {/* LABEL NAMA MODEL */}
                   <div className="absolute top-3 left-3 z-10 bg-slate-900/80 text-emerald-400 text-[11px] font-black tracking-widest px-2.5 py-1.5 rounded shadow border border-slate-700 backdrop-blur-md">
                     {img.modelName}
                   </div>
                   
-                  {/* Container yang dimodifikasi agar support Landscape/Portrait */}
+                  {/* Container Resolusi */}
                   <div className="relative h-72 w-full bg-slate-100 flex items-center justify-center overflow-hidden p-2">
                     <img src={`data:image/png;base64,${img.base64}`} alt="Generated" className="max-w-full max-h-full object-contain rounded drop-shadow-sm" />
                     
