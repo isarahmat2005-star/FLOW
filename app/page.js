@@ -13,14 +13,14 @@ export default function Home() {
   const [status, setStatus] = useState({ msg: '', type: '' });
 
   // DAFTAR MODEL YANG AKAN DITES SECARA BERSAMAAN
+  // Kita tambahkan GEM_PIX_2 yang baru saja ditemukan dari Inspect Element!
   const modelsToTest = [
+    "GEM_PIX_2", // Nama sandi asli internal Google (Wajib Tes Pertama)
     "NANO_BANANA_PRO", 
     "NANO_BANANA_2", 
     "NANO_BANANA",
-    "NANO_BANANA_PRO_V1",
     "IMAGEN_4",
-    "IMAGEN_4_ALPHA",
-    "IMAGEN_3_5" // Kita masukkan ini sebagai bukti bahwa sistemnya bekerja
+    "IMAGEN_3_5"
   ];
 
   const handleGenerate = async () => {
@@ -28,7 +28,7 @@ export default function Home() {
     if (!prompt.trim()) return setStatus({ msg: 'Prompt tidak boleh kosong!', type: 'error' });
 
     setIsGenerating(true);
-    setStatus({ msg: 'Sedang melakukan uji coba ke berbagai model...', type: 'process' });
+    setStatus({ msg: 'Sedang menembak API ke berbagai sandi model...', type: 'process' });
     let successCount = 0;
 
     // Kita jalankan semua tes model satu per satu
@@ -74,9 +74,9 @@ export default function Home() {
 
     setIsGenerating(false);
     if (successCount > 0) {
-      setStatus({ msg: `Selesai! ${successCount} gambar berhasil dimuat.`, type: 'success' });
+      setStatus({ msg: `Jackpot! ${successCount} gambar berhasil tembus dari model yang valid.`, type: 'success' });
     } else {
-      setStatus({ msg: 'Semua tebakan model gagal (Error 400).', type: 'error' });
+      setStatus({ msg: 'Semua tebakan model gagal. Cek kembali token atau API Backend.', type: 'error' });
     }
   };
 
@@ -84,7 +84,7 @@ export default function Home() {
     const cleanName = promptText.substring(0, 15).replace(/[^a-zA-Z0-9]/g, '_');
     const a = document.createElement('a');
     a.href = `data:image/png;base64,${base64Data}`;
-    a.download = `FLOW_${cleanName}.png`;
+    a.download = `FLOW_QC_${cleanName}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -111,22 +111,22 @@ export default function Home() {
 
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-500 block mb-2 uppercase">Aspect Ratio</label>
-              <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)} className="w-full p-2 border border-slate-300 rounded text-sm outline-none">
-                <option value="IMAGE_ASPECT_RATIO_SQUARE">1:1 Square</option>
-                <option value="IMAGE_ASPECT_RATIO_LANDSCAPE">16:9 Landscape</option>
-                <option value="IMAGE_ASPECT_RATIO_PORTRAIT">9:16 Portrait</option>
+              <label className="text-xs font-bold text-slate-500 block mb-2 uppercase">Aspect Ratio (Resolusi)</label>
+              <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)} className="w-full p-2 border border-slate-300 rounded text-sm outline-none font-medium">
+                <option value="IMAGE_ASPECT_RATIO_SQUARE">1:1 (Square)</option>
+                <option value="IMAGE_ASPECT_RATIO_LANDSCAPE">16:9 (Landscape)</option>
+                <option value="IMAGE_ASPECT_RATIO_PORTRAIT">9:16 (Portrait)</option>
               </select>
             </div>
             
             <div className="pt-2">
               <label className="text-xs font-bold text-slate-500 block mb-2 uppercase">Prompt Uji Coba</label>
-              <textarea rows="3" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Misal: kucing terbang" className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none text-sm" />
+              <textarea rows="3" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Misal: mockup green screen" className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none text-sm" />
             </div>
             
             <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
               <p className="text-xs text-indigo-800 font-medium leading-relaxed">
-                <strong>Mode Lab:</strong> Saat klik Generate, sistem akan mencoba memanggil model NANO_BANANA dan IMAGEN_4 secara bersamaan.
+                <strong>Mode Radar:</strong> Saat klik Generate, sistem akan menembak prompt ini ke semua daftar nama model (termasuk GEM_PIX_2) untuk mencari mana yang masih aktif di server Flow.
               </p>
             </div>
           </div>
@@ -134,11 +134,11 @@ export default function Home() {
 
         <div className="p-6 bg-slate-50 border-t border-slate-200 sticky bottom-0 z-20">
           <button onClick={handleGenerate} disabled={isGenerating} className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white rounded-lg font-bold transition-all flex items-center justify-center gap-2">
-            {isGenerating ? <><Loader2 className="animate-spin" size={18} /> Testing Models...</> : <><Sparkles size={18} /> Mulai Tes Model</>}
+            {isGenerating ? <><Loader2 className="animate-spin" size={18} /> Menembus Server...</> : <><Sparkles size={18} /> Mulai Tes Resolusi & Model</>}
           </button>
           
           {status.msg && (
-            <div className={`mt-3 text-xs text-center font-medium p-2 rounded block ${status.type === 'error' ? 'bg-red-50 text-red-600' : status.type === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+            <div className={`mt-3 text-xs text-center font-medium p-2 rounded block ${status.type === 'error' ? 'bg-red-50 text-red-600 border border-red-100' : status.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>
               {status.msg}
             </div>
           )}
@@ -149,10 +149,10 @@ export default function Home() {
       <main className="flex-1 flex flex-col h-full bg-slate-100 overflow-hidden relative">
         <header className="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10">
           <h2 className="text-sm font-bold text-slate-700 uppercase flex items-center gap-2">
-            <Layers size={16} /> Hasil Tes <span className="text-slate-400 font-normal">({images.length})</span>
+            <Layers size={16} /> Hasil Eksekusi <span className="text-slate-400 font-normal">({images.length})</span>
           </h2>
-          <button onClick={() => setImages([])} className="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-md flex items-center gap-1">
-            <Trash2 size={14} /> Clear
+          <button onClick={() => setImages([])} className="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-md flex items-center gap-1 transition-colors">
+            <Trash2 size={14} /> Bersihkan Layar
           </button>
         </header>
 
@@ -160,22 +160,24 @@ export default function Home() {
           {images.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-400">
               <ImageIcon size={48} className="mb-4 text-slate-300" />
-              <p className="font-medium text-slate-500">Belum ada hasil tes</p>
+              <p className="font-medium text-slate-500">Menunggu tembakan pertama...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 content-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 content-start">
               {images.map((img) => (
                 <div key={img.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative group">
-                  {/* LABEL NAMA MODEL */}
-                  <div className="absolute top-2 left-2 z-10 bg-indigo-600 text-white text-[10px] font-black px-2 py-1 rounded shadow-md border border-indigo-400 backdrop-blur-sm">
+                  {/* LABEL NAMA MODEL (Lebih mencolok agar gampang dianalisis) */}
+                  <div className="absolute top-3 left-3 z-10 bg-slate-900/80 text-emerald-400 text-[11px] font-black tracking-widest px-2.5 py-1.5 rounded shadow border border-slate-700 backdrop-blur-md">
                     {img.modelName}
                   </div>
                   
-                  <div className="relative aspect-square bg-slate-100">
-                    <img src={`data:image/png;base64,${img.base64}`} alt="Generated" className="w-full h-full object-contain" />
-                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <button onClick={() => handleDownload(img.base64, img.prompt)} className="p-3 bg-white text-slate-800 rounded-full hover:bg-indigo-50 hover:text-indigo-600 shadow-lg">
-                        <Download size={20} />
+                  {/* Container yang dimodifikasi agar support Landscape/Portrait */}
+                  <div className="relative h-72 w-full bg-slate-100 flex items-center justify-center overflow-hidden p-2">
+                    <img src={`data:image/png;base64,${img.base64}`} alt="Generated" className="max-w-full max-h-full object-contain rounded drop-shadow-sm" />
+                    
+                    <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                      <button onClick={() => handleDownload(img.base64, img.prompt)} className="p-4 bg-white text-slate-900 rounded-full hover:bg-indigo-500 hover:text-white shadow-xl transform scale-90 group-hover:scale-100 transition-all">
+                        <Download size={22} />
                       </button>
                     </div>
                   </div>
@@ -187,4 +189,4 @@ export default function Home() {
       </main>
     </div>
   );
-    }
+}
