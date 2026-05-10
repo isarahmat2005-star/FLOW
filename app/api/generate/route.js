@@ -7,18 +7,17 @@ export async function POST(req) {
     const projectId = "cd7643fb-9500-4973-a185-0350a90ad361"; 
 
     // PASTE TOKEN RECAPTCHA FRESH DARI INSPECT ELEMENT KE SINI
+    // (Ingat, ini cepat basi, ambil yang paling baru sebelum save!)
     const recaptchaToken = "PASTE_TOKEN_RECAPTCHA_YANG_PANJANG_BANGET_DISINI";
-    const sessionId = ";1778390754464"; // Sesuaikan dengan yang ada di Inspect Element
 
     const payload = {
       clientContext: { 
         projectId: projectId,
         tool: "PINHOLE",
-        // KITA SOGOK SATPAMNYA DENGAN RECAPTCHA FRESH
         recaptchaContext: {
           applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
-          token: recaptchaToken,
-          sessionId: sessionId
+          token: recaptchaToken
+          // KITA HAPUS sessionId KARENA DITOLAK SERVER
         }
       },
       mediaGenerationContext: {
@@ -31,8 +30,8 @@ export async function POST(req) {
             tool: "PINHOLE",
             recaptchaContext: {
               applicationType: "RECAPTCHA_APPLICATION_TYPE_WEB",
-              token: recaptchaToken,
-              sessionId: sessionId
+              token: recaptchaToken
+              // KITA HAPUS sessionId KARENA DITOLAK SERVER
             }
           },
           imageAspectRatio: aspectRatio || "IMAGE_ASPECT_RATIO_SQUARE",
