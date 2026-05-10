@@ -34,8 +34,8 @@ export async function POST(req) {
       ]
     };
 
-    // PERBAIKAN FATAL: Menggunakan Titik Dua (:) sebelum flowMediaBatchGenerateImages
-    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}:flowMediaBatchGenerateImages`;
+    // PERBAIKAN URL: Kita arahkan tepat ke dalam jalur "flowWorkflows"
+    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}/flowWorkflows:flowMediaBatchGenerateImages`;
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
