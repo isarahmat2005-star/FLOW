@@ -35,7 +35,7 @@ export async function POST(req) {
     };
 
     // PERBAIKAN URL: Kita arahkan tepat ke dalam jalur "flowWorkflows"
-    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/projects/${projectId}/flowWorkflows:flowMediaBatchGenerateImages`;
+    const endpointUrl = `https://aisandbox-pa.googleapis.com/v1/flowWorkflows:flowMediaBatchGenerateImages`;
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
